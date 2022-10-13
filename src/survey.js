@@ -24,24 +24,28 @@ class Question {
 }
 
 class Survey {
-  constructor(schema, container) {
-    this.questions = schema.questions.map(
-      (question) =>
-        new Question(
-          question.type,
-          question.name,
-          question.title,
-          question.isRequired,
-          question?.choices
-        )
-    );
+  constructor(container, schema = {}) {
+    if (schema.questions === undefined) this.questions = [];
+    else
+      this.questions = schema.questions.map(
+        (question) =>
+          new Question(
+            question.type,
+            question.name,
+            question.title,
+            question.isRequired,
+            question?.choices
+          )
+      );
     this.container = document.getElementById(container);
+    this.isEditMode = false;
   }
 
   /**
    * Method to create survey and display it
    */
   createSurvey() {
+    this.container.innerHTML = "";
     this.questions.forEach((question) => {
       const domQuestion = this.#createQuestion(question);
       if (domQuestion !== undefined) this.container.append(domQuestion);
@@ -72,6 +76,11 @@ class Survey {
    */
   #createTextQuestion(question) {
     const mainDiv = document.createElement("div");
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.addEventListener("click", (ev) => {
+      this.#deleteQuestion(ev, question);
+    });
     mainDiv.classList.add("question");
     const label = document.createElement("label");
     label.textContent = question.title;
@@ -87,7 +96,7 @@ class Survey {
       input.setAttribute("required", question.isRequired);
     input.name = question.name;
 
-    mainDiv.append(label, input);
+    mainDiv.append(deleteButton, label, input);
     return mainDiv;
   }
 
@@ -142,18 +151,43 @@ class Survey {
 
   editSurvey() {
     this.createSurvey();
+    this.isEditMode = true;
+    this.#createAddQuestionButton();
+    this.#createCompleteButton();
+  }
+
+  #addQuestion() {
+    const question = new Question();
+    this.questions.push(question);
+    this.container.insertBefore(
+      this.#createQuestion(new Question()),
+      this.container.lastElementChild
+    );
+  }
+
+  #deleteQuestion(ev, question) {
+    const idx = this.questions.findIndex(
+      (predicate) => question.name === predicate.name
+    );
+    this.questions.splice(idx, 1);
+    this.editSurvey();
+  }
+
+  #createAddQuestionButton() {
     const button = document.createElement("button");
-    button.textContent = "Add More Questions!";
+    button.textContent = "Add Question!";
     button.addEventListener("click", () => {
       this.#addQuestion();
     });
     this.container.append(button);
   }
 
-  #addQuestion() {
-    this.container.insertBefore(
-      this.#createQuestion(new Question()),
-      this.container.lastElementChild
-    );
+  #createCompleteButton() {
+    const button = document.createElement("button");
+    button.textContent = "Complete!";
+    button.addEventListener("click", () => {
+      console.log(JSON.stringify({ questions: this.questions }));
+    });
+    this.container.insertBefore(button, this.container.firstElementChild);
   }
 }

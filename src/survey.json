@@ -17,32 +17,6 @@
       "name": "name",
       "title": "What is your name?",
       "isRequired": true
-    },
-    {
-      "type": "radio",
-      "name": "gender",
-      "title": "What is your gender?",
-      "isRequired": false,
-      "choices": [
-        {
-          "value": "male",
-          "text": "Male"
-        },
-        {
-          "value": "female",
-          "text": "Female"
-        },
-        {
-          "value": "unknown",
-          "text": "Unknown"
-        }
-      ]
-    },
-    {
-      "type": "boolean",
-      "name": "virganity",
-      "title": "Are you virgin?",
-      "isRequired": true
     }
   ]
 }
