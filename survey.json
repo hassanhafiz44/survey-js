@@ -1,0 +1,48 @@
+{
+  "title": "About You!",
+  "description": "This survey is about you",
+  "logoPosition": "right",
+  "completedHtml": "<h3>Thank you for your feedback.</h3><h5>Your thoughts and ideas will help us to create a great product!</h5>",
+  "completedHtmlOnCondition": [
+    {
+      "html": "<h3>Thank you for your feedback.</h3><h5>We glad that you love our product. Your ideas and suggestions will help us to make our product even better!</h5>"
+    },
+    {
+      "html": "<h3>Thank you for your feedback.</h3><h5> We are glad that you share with us your ideas.We highly value all suggestions from our customers. We do our best to improve the product and reach your expectation.</h5><br />"
+    }
+  ],
+  "elements": [
+    {
+      "type": "text",
+      "name": "question1",
+      "title": "What is your name?",
+      "isRequired": true
+    },
+    {
+      "type": "radiogroup",
+      "name": "question2",
+      "title": "What is your gender?",
+      "isRequired": true,
+      "choices": [
+        {
+          "value": "item1",
+          "text": "Male"
+        },
+        {
+          "value": "item2",
+          "text": "Female"
+        },
+        {
+          "value": "item3",
+          "text": "Unknown"
+        }
+      ]
+    },
+    {
+      "type": "boolean",
+      "name": "question3",
+      "title": "Are you virgin?",
+      "isRequired": true
+    }
+  ]
+}
