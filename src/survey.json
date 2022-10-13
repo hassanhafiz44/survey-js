@@ -14,33 +14,33 @@
   "elements": [
     {
       "type": "text",
-      "name": "question1",
+      "name": "name",
       "title": "What is your name?",
       "isRequired": true
     },
     {
-      "type": "radiogroup",
-      "name": "question2",
+      "type": "radio",
+      "name": "gender",
       "title": "What is your gender?",
-      "isRequired": true,
+      "isRequired": false,
       "choices": [
         {
-          "value": "item1",
+          "value": "male",
           "text": "Male"
         },
         {
-          "value": "item2",
+          "value": "female",
           "text": "Female"
         },
         {
-          "value": "item3",
+          "value": "unknown",
           "text": "Unknown"
         }
       ]
     },
     {
       "type": "boolean",
-      "name": "question3",
+      "name": "virganity",
       "title": "Are you virgin?",
       "isRequired": true
     }
