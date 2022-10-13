@@ -81,6 +81,11 @@ class Survey {
     deleteButton.addEventListener("click", (ev) => {
       this.#deleteQuestion(ev, question);
     });
+    const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.addEventListener("click", (ev) => {
+      this.#editQuestion(ev, question);
+    });
     mainDiv.classList.add("question");
     const label = document.createElement("label");
     label.textContent = question.title;
@@ -96,7 +101,7 @@ class Survey {
       input.setAttribute("required", question.isRequired);
     input.name = question.name;
 
-    mainDiv.append(deleteButton, label, input);
+    mainDiv.append(deleteButton, label, input, editButton);
     return mainDiv;
   }
 
@@ -153,7 +158,7 @@ class Survey {
     this.createSurvey();
     this.isEditMode = true;
     this.#createAddQuestionButton();
-    this.#createCompleteButton();
+    this.#saveSurveyButton();
   }
 
   #addQuestion() {
@@ -182,12 +187,40 @@ class Survey {
     this.container.append(button);
   }
 
-  #createCompleteButton() {
+  #saveSurveyButton() {
     const button = document.createElement("button");
     button.textContent = "Complete!";
     button.addEventListener("click", () => {
       console.log(JSON.stringify({ questions: this.questions }));
     });
     this.container.insertBefore(button, this.container.firstElementChild);
+  }
+
+  #editQuestion(ev, question) {
+    this.#createEditModal();
+  }
+
+  #createEditModal() {
+    const div = document.createElement("div");
+    div.id = "editModal";
+    div.style.zIndex = 9999;
+    div.style.height = "100vh";
+    div.style.width = "100%";
+    div.style.position = "absolute";
+    div.style.top = 0;
+    div.style.left = 0;
+    div.style.backgroundColor = "teal";
+    const button = document.createElement("button");
+    div.append(button);
+    button.textContent = "Save";
+    button.addEventListener("click", (ev) => {
+      this.#saveQuestion();
+    });
+    this.container.append(div);
+  }
+
+  #saveQuestion() {
+    const modal = document.getElementById("editModal");
+    modal.remove();
   }
 }

@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  document.body.style.position = "relative";
   fetch("./survey.json")
     .then((response) => response.json())
     .then((data) => {
