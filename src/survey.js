@@ -79,6 +79,11 @@ class Survey {
       const nameInput = document.createElement("input");
       nameInput.classList = "input-text input-name";
       nameInput.value = question.name;
+      nameInput.placeholder = "Enter a name";
+
+      nameInput.addEventListener("change", (ev) => {
+        question.name = ev.target.value;
+      });
 
       toolbarDiv.append(nameInput);
       questionDiv.append(toolbarDiv);
@@ -112,9 +117,12 @@ class Survey {
       });
 
       const mainInput = document.createElement("input");
-      mainInput.value = "Question";
+      mainInput.value = question.title;
       mainInput.classList = "input-text";
       mainInput.setAttribute("required", "required");
+      mainInput.addEventListener("change", (ev) => {
+        question.title = ev.target.value;
+      });
 
       mainDiv.append(mainInput);
 
