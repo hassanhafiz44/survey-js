@@ -7,14 +7,12 @@ class Choice {
 
 class Question {
   constructor(
-    id = 0,
     type = "text",
     name = "",
     title = "Question!",
     isRequired = false,
     choices = []
   ) {
-    this.id = id;
     this.type = type;
     this.name = name;
     this.title = title;
@@ -30,9 +28,8 @@ class Survey {
     if (schema.questions === undefined) this.questions = [];
     else
       this.questions = schema.questions.map(
-        (question, index) =>
+        (question) =>
           new Question(
-            index,
             question.type,
             question.name,
             question.title,
@@ -51,7 +48,7 @@ class Survey {
     this.container.innerHTML = "";
     this.questions.forEach((question) => {
       const domQuestion = this.#createQuestion(question);
-      this.container.append(domQuestion);
+      if (domQuestion !== undefined) this.container.append(domQuestion);
     });
   }
 
@@ -61,78 +58,14 @@ class Survey {
    * @returns {HTMLDivElement|undefined} Returns the question dom object created
    */
   #createQuestion(question) {
-    const questionDiv = document.createElement("div");
-    questionDiv.classList.add("question");
-
-    const mainDiv = document.createElement("div");
-    mainDiv.classList.add("main");
-    const asteriskSpan = this.#addRequiredAsterisk();
-    asteriskSpan.style.display = question.isRequired ? "" : "none";
-
-    mainDiv.append(asteriskSpan);
-    questionDiv.append(mainDiv);
-
-    if (this.isEditMode) {
-      const toolbarDiv = document.createElement("div");
-      toolbarDiv.classList.add("toolbar");
-
-      const nameInput = document.createElement("input");
-      nameInput.classList = "input-text input-name";
-      nameInput.value = question.name;
-
-      toolbarDiv.append(nameInput);
-      questionDiv.append(toolbarDiv);
-
-      const requiredInputDiv = document.createElement("div");
-      const isRequiredInput = document.createElement("input");
-      isRequiredInput.type = "checkbox";
-      isRequiredInput.id = `isRequired-${question.id}`;
-      isRequiredInput.checked = question.isRequired;
-
-      isRequiredInput.addEventListener("change", (ev) => {
-        question.isRequired = ev.target.checked;
-        asteriskSpan.style.display = question.isRequired ? "" : "none";
-      });
-      requiredInputDiv.append(isRequiredInput);
-      toolbarDiv.append(requiredInputDiv);
-
-      const isRequiredLabel = document.createElement("label");
-      isRequiredLabel.setAttribute("for", `isRequired-${question.id}`);
-      isRequiredLabel.textContent = "Required";
-
-      requiredInputDiv.append(isRequiredLabel);
-
-      const deleteButton = document.createElement("button");
-      deleteButton.type = "button";
-      deleteButton.textContent = "Delete";
-      toolbarDiv.append(deleteButton);
-      deleteButton.classList = "delete-button";
-      deleteButton.addEventListener("click", (ev) => {
-        this.#deleteQuestion(ev, question);
-      });
-
-      const mainInput = document.createElement("input");
-      mainInput.value = "Question";
-      mainInput.classList = "input-text";
-      mainInput.setAttribute("required", "required");
-
-      mainDiv.append(mainInput);
-
-      const inputDiv = document.createElement("div");
-      inputDiv.classList = "input-label";
-
-      mainDiv.append(inputDiv);
-    } else {
-      const mainLabel = document.createElement("label");
-      mainLabel.textContent = question.title;
-      mainLabel.setAttribute("for", `question-${question.name}`);
-
-      const mainInput = document.createElement("input");
-      mainInput.classList = "input-text input-answer";
-      mainInput.id = `question-${question.name}`;
-      mainDiv.append(mainLabel, mainInput);
+    switch (question.type) {
+      case "text":
+        return this.#createTextQuestion(question);
+      case "radio":
+        return this.#createRadioQuestion(question);
+      default:
+        return undefined;
     }
-    return questionDiv;
   }
 
   /**
@@ -216,22 +149,25 @@ class Survey {
    */
   #addRequiredAsterisk() {
     const span = document.createElement("span");
-    span.textContent = "* ";
-    span.classList.add("required-asterisk");
+    span.textContent = " *";
+    span.style.color = "red";
     return span;
   }
 
   editSurvey() {
-    this.isEditMode = true;
     this.createSurvey();
+    this.isEditMode = true;
     this.#createAddQuestionButton();
     this.#saveSurveyButton();
   }
 
   #addQuestion() {
-    const question = new Question(this.questions.length);
+    const question = new Question();
     this.questions.push(question);
-    this.editSurvey();
+    this.container.insertBefore(
+      this.#createQuestion(new Question()),
+      this.container.lastElementChild
+    );
   }
 
   #deleteQuestion(ev, question) {
