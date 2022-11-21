@@ -5,6 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((data) => {
       console.log(data);
       const survey = new Survey("questionnaire", data);
-      survey.createSurvey();
+      survey.createSurvey;
     });
 });
